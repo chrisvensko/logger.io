@@ -8,5 +8,9 @@
   },
   "repository": "",
   "author": "Chris Vensko",
-  "license": "-"
+  "license": "-",
+  "dependencies": {
+    "socket.io": "~0.9.14",
+    "underscore": "~1.4.4"
+  }
 }
