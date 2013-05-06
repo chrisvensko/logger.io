@@ -34,25 +34,26 @@ var logger = function(server) {
 			_.each(this.getSockets(), _.bind(this.sendError, this, [e]));
 		},
 
-		onData: function(channel, data) {
-			this.log('data', {channel: channel, data: data.toString()});
+		onData: function(source, data) {
+			this.log('data', {source: source, data: data.toString()});
 		},
 
-		pipe: function(stream, channel) {
+		pipe: function(stream, source) {
 			stream.on('error', _.bind(this.onError, this));
-			stream.on('data', _.bind(this.onData, this, [channel]));
+			stream.on('data', _.bind(this.onData, this, [source]));
 			stream.resume();
 		}
 	};
 
 	_.bindAll(Logger);
 
-	io = require('socket.io').listen(server);
-	Logger.init();
+	if(undefined !== server.sockets) {
+		io = server;
+	} else {
+		io = require('socket.io').listen(server);
+	}
 
-
-	internalLogger = Logger;
-	return Logger;
+	return Logger.init();
 };
 
 module.exports = logger;
